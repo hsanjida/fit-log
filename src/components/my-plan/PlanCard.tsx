@@ -1,42 +1,43 @@
 "use client";
 
 import Link from "next/link";
-import { usePlan } from "@/lib/plan-context";
-import { useToast } from "@/lib/toast-context";
+import { usePlan } from "@/context/PlanContext";
 import { ClockIcon, FlameIcon, StarIcon, CheckIcon, XIcon } from "@/lib/icons";
 import type { PlanListItem } from "@/lib/types";
 
 export default function PlanCard({
   workout,
   listType,
+  onToast,
 }: {
   workout: PlanListItem;
   listType: "plan" | "saved";
+  onToast: (message: string) => void;
 }) {
   const { toggleDone, removeFromPlan, removeFromSaved } = usePlan();
-  const { showToast } = useToast();
 
   function handleRemove() {
     if (listType === "plan") {
       removeFromPlan(workout.id);
-      showToast("Removed from today's plan");
+      onToast("Removed from today's plan");
     } else {
       removeFromSaved(workout.id);
-      showToast("Removed from saved");
+      onToast("Removed from saved");
     }
   }
 
   function handleDone() {
     toggleDone(workout.id);
-    showToast(workout.done ? "Marked as not done" : "Marked as done");
+    onToast(workout.done ? "Marked as not done" : "Marked as done");
   }
 
   return (
-    <div
-      className={`card card-side bg-base-200 border border-base-300 p-3 sm:p-4 gap-4 items-center ${
-        workout.done ? "opacity-60" : ""
-      }`}
-    >
+    <>
+      <div
+        className={`card card-side bg-base-200 border border-base-300 p-3 sm:p-4 gap-4 items-center ${
+          workout.done ? "opacity-60" : ""
+        }`}
+      >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={workout.image}
@@ -83,6 +84,7 @@ export default function PlanCard({
           <XIcon className="w-4 h-4" />
         </button>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

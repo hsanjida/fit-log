@@ -4,7 +4,7 @@ A dark, no-nonsense gym companion built with Next.js. Browse a library of twelve
 lifts, open a workout to see full instructions and key specs, then add lifts to
 today's plan or save them for later — all tracked live in the navbar.
 ## Live Link
-
+https://fit-log-theta-two.vercel.app/
 
 ## Technologies used
 
