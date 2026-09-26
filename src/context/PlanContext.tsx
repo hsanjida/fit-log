@@ -4,6 +4,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { ReactNode } from "react";
 
 const STORAGE_KEY = "fitlog:plan-state:v1";
+const LEGACY_STORAGE_KEY = "fitlog-state-v1";
+const MIGRATION_KEY = "fitlog:plan-state:migrated-v1";
 export const PLAN_CAP = 5;
 
 type PlanContextValue = {
@@ -24,7 +26,10 @@ function toIds(value: unknown): number[] {
   if (!Array.isArray(value)) return [];
   return value.flatMap((item) => {
     if (typeof item === "number" && Number.isFinite(item)) return [item];
-    if (item && typeof item === "object" && "id" in item && typeof item.id === "number") return [item.id];
+    if (item && typeof item === "object" && "id" in item) {
+      const id = typeof item.id === "number" ? item.id : Number(item.id);
+      if (Number.isFinite(id) && id > 0) return [id];
+    }
     return [];
   });
 }
@@ -41,8 +46,21 @@ export function PlanProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const stored = JSON.parse(raw) as Record<string, unknown>;
+      let stored = raw ? JSON.parse(raw) as Record<string, unknown> : null;
+      if (window.localStorage.getItem(MIGRATION_KEY) !== "done") {
+        const legacyRaw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+        if (legacyRaw) {
+          const legacy = JSON.parse(legacyRaw) as Record<string, unknown>;
+          const currentHasItems = stored && (
+            toIds(stored.todayPlan ?? stored.plan).length > 0 ||
+            toIds(stored.savedWorkouts ?? stored.saved).length > 0
+          );
+          if (!currentHasItems) stored = legacy;
+          window.localStorage.setItem(MIGRATION_KEY, "done");
+        }
+      }
+
+      if (stored) {
         const planSource = stored.todayPlan ?? stored.plan;
         const savedSource = stored.savedWorkouts ?? stored.saved;
         const nextPlan = toIds(planSource).slice(0, PLAN_CAP);

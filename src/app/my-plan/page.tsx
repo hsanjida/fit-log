@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   description: "Today's planned lifts and saved workouts.",
 };
 
-export default function MyPlanPage() {
-  return <MyPlanView />;
+export default async function MyPlanPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}) {
+  const { tab } = await searchParams;
+  return <MyPlanView initialTab={tab === "saved" ? "saved" : "plan"} />;
 }

@@ -6,11 +6,11 @@ import { usePlan } from "@/context/PlanContext";
 import type { Workout } from "@/lib/types";
 import PlanCard from "./PlanCard";
 
-export default function MyPlanView() {
+export default function MyPlanView({ initialTab = "plan" }: { initialTab?: "plan" | "saved" }) {
   const { todayPlan, savedWorkouts, done, isLoaded } = usePlan();
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<"plan" | "saved">("plan");
+  const [tab, setTab] = useState<"plan" | "saved">(initialTab);
   const [toast, setToast] = useState("");
 
   function notify(message: string) {
@@ -28,6 +28,10 @@ export default function MyPlanView() {
       .catch(() => setWorkouts([]))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    setTab(initialTab);
+  }, [initialTab]);
 
   const byId = useMemo(() => new Map(workouts.map((workout) => [workout.id, workout])), [workouts]);
   const plannedWorkouts = todayPlan.flatMap((id) => {
