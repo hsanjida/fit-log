@@ -7,7 +7,11 @@ const API_BASE = "https://api.abcz.workers.dev/api/fitlog";
  * Used by the Home page (server component).
  */
 export async function getWorkouts(): Promise<Workout[]> {
-  const res = await fetch(API_BASE, { next: { revalidate: 3600 } });
+  const res = await fetch(API_BASE, {
+    next: { revalidate: 3600 },
+    // Do not let a stalled upstream API keep the homepage request open forever.
+    signal: AbortSignal.timeout(8_000),
+  });
   if (!res.ok) {
     throw new Error(`Failed to load workouts (${res.status})`);
   }
