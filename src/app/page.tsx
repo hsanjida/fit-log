@@ -1,16 +1,14 @@
-import Image from "next/image";
-import Navbar from "./components/navbar";
+import Hero from "@/components/home/Hero";
+import LibrarySection from "@/components/home/LibrarySection";
+import { getWorkouts } from "@/lib/api";
 
-export default function Home() {
+export default async function HomePage() {
+  const workouts = await getWorkouts();
+
   return (
-    <main className="min-h-screen bg-black text-white">
-
-      
-
-      <h1 className="text-4xl font-bold text-center mt-20">
-        FitLog
-      </h1>
-
-    </main>
+    <>
+      <Hero />
+      <LibrarySection workouts={workouts} />
+    </>
   );
 }

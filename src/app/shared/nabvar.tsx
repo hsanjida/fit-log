@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { usePlan } from "@/context/PlanContext";
+import { usePlan } from "@/lib/plan-context";
 import { Menu, X, Dumbbell, Bookmark } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { todayPlan, savedWorkouts, isLoaded } = usePlan();
+  const { plan, saved, hydrated } = usePlan();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const planCount = isLoaded ? todayPlan.length : 0;
-  const savedCount = isLoaded ? savedWorkouts.length : 0;
+  const planCount = hydrated ? plan.length : 0;
+  const savedCount = hydrated ? saved.length : 0;
 
   const isWorkoutActive = pathname === "/" || pathname.startsWith("/workout");
   const isPlanActive = pathname === "/my-plan";
