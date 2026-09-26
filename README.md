@@ -1,30 +1,60 @@
 # FitLog — Workout Library
 
-A dark, no-nonsense gym companion built with Next.js. Browse a library of twelve
-lifts, open a workout to see full instructions and key specs, then add lifts to
-today's plan or save them for later — all tracked live in the navbar.
-## Live Link
-https://fit-log-theta-two.vercel.app/
+FitLog is a responsive workout library and daily training log. Browse exercises, check their instructions and stats, then add lifts to today’s plan or save them for later.
 
-## Technologies used
+## Links
 
-- Next.js (App Router) + TypeScript
-- React
-- Tailwind CSS v4 + daisyUI v5
-- FitLog REST API (`api.abcz.workers.dev/api/fitlog`)
-- Browser `localStorage` for persisting the plan/saved state
+- **Live app:** [fit-log-theta-two.vercel.app](https://fit-log-theta-two.vercel.app/)
+- **GitHub repository:** [hsanjida/fit-log](https://github.com/hsanjida/fit-log)
+
+## Technologies
+
+- Next.js App Router and React
+- TypeScript
+- Tailwind CSS 4 and DaisyUI 5
+- Lucide icons
+- FitLog workout API
+- Browser localStorage for plan persistence
 
 ## Features
 
-1. Responsive workout library with a live **Sort By** (Duration / Calories / Rating) control.
-2. Workout detail pages with key specs, step-by-step instructions, and add-to-plan / save-for-later actions.
-3. **My Plan** page with live Exercises/Minutes/Calories metrics, Today's Plan and Saved tabs, mark-as-done, and remove.
-4. Navbar badges that reflect the live Plan/Saved counts from anywhere in the app.
-5. Toast notifications for every plan/saved action, a custom 404 page, and loading states on the Home and My Plan pages.
-6. Plan and Saved lists persist across reloads via `localStorage`.
+- Responsive library of workouts from the FitLog API, with duration, calorie, and rating sorting
+- Workout detail pages with muscle groups, equipment, difficulty, sets, reps, and step-by-step instructions
+- Independent **Today’s Plan** and **Saved** lists, with counters in the navigation
+- A five-workout limit, live exercise/minute/calorie totals, and Mark as Done and remove actions
+- Toast feedback when workouts are added, saved, completed, or removed
+- Plan and saved workouts persist after reloads; loading and not-found pages are included
 
+## Getting started
 
+Install the project dependencies, then start the development server:
 
+```bash
+npm install
+npm run dev
+```
 
+Open [http://localhost:3000](http://localhost:3000). To create a production build, run `npm run build`, then `npm start` to serve it locally.
 
+## Workout API
 
+- All workouts: `https://api.abcz.workers.dev/api/fitlog`
+- One workout: `https://api.abcz.workers.dev/api/fitlog/:id`
+
+The home page and detail routes fetch workout data on the server. The My Plan page uses the local `/api/workouts` route to load the list for saved and planned workout IDs.
+
+## Project structure
+
+```text
+src/
+├── app/                 # App Router pages, loading UI, API route, and styles
+├── components/
+│   ├── home/            # Hero, library, and workout cards
+│   ├── layout/          # Navbar and footer
+│   ├── my-plan/         # Plan and saved list UI
+│   ├── providers/       # Client state provider
+│   └── workout/         # Workout detail actions
+├── context/             # Plan and saved state
+└── lib/                 # API functions, types, and icons
+public/assets/           # FitLog logo and hero artwork
+```
