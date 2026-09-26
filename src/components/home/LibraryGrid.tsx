@@ -62,7 +62,9 @@ export default function LibraryGrid({ workouts }: { workouts: Workout[] }) {
         </div>
       </div>
 
-      {filteredAndSorted.length === 0 ? (
+      {workouts.length === 0 ? (
+        <p className="rounded-box border border-dashed border-base-300 px-6 py-12 text-center text-base-content/65" role="status">The workout library is temporarily unavailable. Please try again shortly.</p>
+      ) : filteredAndSorted.length === 0 ? (
         <p className="rounded-box border border-dashed border-base-300 px-6 py-12 text-center text-base-content/65" role="status">No workouts match “{query}”.</p>
       ) : <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {filteredAndSorted.map((workout) => (
