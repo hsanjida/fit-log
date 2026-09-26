@@ -1,0 +1,7 @@
+import { NextResponse } from "next/server";
+import { getWorkouts } from "@/lib/workouts";
+
+export async function GET() {
+  try { return NextResponse.json(await getWorkouts()); }
+  catch { return NextResponse.json({ error: "Workout data is temporarily unavailable." }, { status: 502 }); }
+}
